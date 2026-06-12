@@ -1,0 +1,5 @@
+.build/
+*.app/
+/tmp/
+*.log
+.DS_Store
