@@ -102,6 +102,7 @@ func fetchActiveITermWindowIndex() -> Int? {
 class WindowStore: ObservableObject {
     @Published var windows: [ITerm2Window] = []
     @Published var activeId: Int? = nil
+    var onRefresh: (() -> Void)?
 
     func refresh() {
         DispatchQueue.global(qos: .background).async {
@@ -112,6 +113,7 @@ class WindowStore: ObservableObject {
                 if let active = active {
                     self.activeId = active
                 }
+                self.onRefresh?()
             }
         }
     }
@@ -209,7 +211,7 @@ struct SidebarView: View {
 // MARK: - AppDelegate
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-    var panels: [NSPanel] = []
+    var panels: [(panel: NSPanel, screen: NSScreen)] = []
     var statusItem: NSStatusItem!
     let store = WindowStore()
     var timer: Timer?
@@ -227,6 +229,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         setupStatusItem()
         setupPanels()
+
+        store.onRefresh = { [weak self] in self?.updatePanelVisibility() }
 
         // Start polling after panels are up
         store.refresh()
@@ -247,9 +251,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func screensChanged() {
-        panels.forEach { $0.orderOut(nil) }
+        panels.forEach { $0.panel.orderOut(nil) }
         panels.removeAll()
         setupPanels()
+    }
+
+    private func updatePanelVisibility() {
+        for entry in panels {
+            let hasWindows = !store.windows(onScreen: entry.screen).isEmpty
+            if hasWindows {
+                entry.panel.orderFrontRegardless()
+            } else {
+                entry.panel.orderOut(nil)
+            }
+        }
     }
 
     private func setupPanels() {
@@ -278,7 +293,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             panel.orderFrontRegardless()
 
             NSLog("Panel visible=%d screen='%@'", panel.isVisible ? 1 : 0, panel.screen?.localizedName ?? "nil")
-            panels.append(panel)
+            panels.append((panel: panel, screen: screen))
         }
     }
 
@@ -297,7 +312,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func iconClicked() {
-        let allVisible = panels.allSatisfy { $0.isVisible }
+        let allVisible = panels.allSatisfy { $0.panel.isVisible }
         let menu = NSMenu()
         let toggle = NSMenuItem(
             title: allVisible ? "Hide Sidebar" : "Show Sidebar",
@@ -316,8 +331,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func togglePanels() {
-        let allVisible = panels.allSatisfy { $0.isVisible }
-        panels.forEach { allVisible ? $0.orderOut(nil) : $0.orderFrontRegardless() }
+        let allVisible = panels.allSatisfy { $0.panel.isVisible }
+        panels.forEach { allVisible ? $0.panel.orderOut(nil) : $0.panel.orderFrontRegardless() }
     }
 }
 
