@@ -10,7 +10,7 @@ rm -rf "$APP"
 mkdir -p "$MACOS" "$RESOURCES"
 
 echo "Compiling..."
-swiftc main.swift \
+swiftc main.swift demo.swift \
   -o "$MACOS/iTermSidebar" \
   -framework Cocoa \
   -framework SwiftUI \
