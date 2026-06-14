@@ -3,6 +3,8 @@
 A lightweight macOS status bar app that puts a persistent sidebar on every monitor,
 showing all open iTerm2 windows — filtered to the windows on each screen.
 
+![sidebar mockup](wallpaper-mockup.png)
+
 ![sidebar screenshot](screenshot-v1.png)
 
 ## Features
