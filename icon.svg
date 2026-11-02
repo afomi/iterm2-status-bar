@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- App icon background -->
+  <rect width="1024" height="1024" rx="226" fill="#1c1c1e"/>
+
+  <!-- Terminal window shell -->
+  <rect x="140" y="140" width="744" height="744" rx="44" fill="#141416"/>
+
+  <!-- Terminal content area (left) -->
+  <path fill="#0a0a0c" d="M 140 140 h 520 a 44 44 0 0 1 44 44 v 656 a 44 44 0 0 1 -44 44 H 140 a 44 44 0 0 1 -44 -44 V 184 a 44 44 0 0 1 44 -44 z" transform="translate(44,0)"/>
+  <rect x="140" y="140" width="520" height="744" fill="#0a0a0c"/>
+  <rect x="140" y="828" width="520" height="56" rx="44" fill="#0a0a0c"/>
+  <rect x="140" y="140" width="44" height="744" rx="44" fill="#0a0a0c"/>
+
+  <!-- Sidebar panel (right) -->
+  <rect x="660" y="140" width="224" height="744" fill="#26262a"/>
+  <rect x="840" y="140" width="44" height="744" rx="44" fill="#26262a"/>
+  <rect x="660" y="828" width="224" height="56" rx="44" fill="#26262a"/>
+
+  <!-- Sidebar list items -->
+  <rect x="696" y="352" width="88" height="10" rx="5" fill="#48484c"/>
+  <rect x="696" y="432" width="112" height="10" rx="5" fill="#58585c"/>
+  <rect x="696" y="512" width="72" height="10" rx="5" fill="#48484c"/>
+
+  <!-- Active session indicator -->
+  <circle cx="680" cy="437" r="7" fill="#32d74b"/>
+
+  <!-- Terminal cursor -->
+  <rect x="176" y="392" width="12" height="26" rx="2" fill="#32d74b" opacity="0.9"/>
+</svg>
