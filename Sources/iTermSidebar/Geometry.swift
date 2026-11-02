@@ -37,7 +37,9 @@ func clampedWidth(for window: CGRect, sidebars: [CGRect], minimumWidth: CGFloat)
 /// A tall rect is the right-hand list: the window's right edge stops at its left edge.
 /// A wide rect is the top shelf: the window's top edge moves to just below it.
 /// `requireOuterEdge` is for move events (a drag). Only a window that was just placed
-/// against the outer edge — a zoom — is trimmed. A resize uses the looser overlap rule.
+/// against the list's outer edge — a zoom — is trimmed. The shelf never trims on a move:
+/// a window dragged to the top looks like a zoom, and each drag would cost it height.
+/// A resize uses the looser overlap rule.
 func clampedFrame(
     for window: CGRect,
     reserved: [CGRect],
@@ -55,8 +57,8 @@ func clampedFrame(
             frame.size.width = width
             changed = true
         } else {
+            if requireOuterEdge { continue }
             let above = obstacle.minY - frame.minY
-            if requireOuterEdge, above > 40 || above < -8 { continue }
             guard above <= 80, frame.minY < obstacle.maxY, frame.maxY > obstacle.maxY else { continue }
             let height = frame.maxY - obstacle.maxY
             guard height >= minimumHeight else { continue }

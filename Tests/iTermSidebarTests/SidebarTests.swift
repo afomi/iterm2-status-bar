@@ -308,6 +308,10 @@ private func record(
     #expect(clampedFrame(for: intoShelf, reserved: [shelf], minimumWidth: 300, requireOuterEdge: true) == nil)
     #expect(clampedFrame(for: intoShelf, reserved: [shelf], minimumWidth: 300)?.origin.y == 67)
 
+    // Dragged flush to the top, under the shelf: a move alone never shortens it.
+    let dragToTop = CGRect(x: 0, y: 25, width: 1440, height: 600)
+    #expect(clampedFrame(for: dragToTop, reserved: [shelf], minimumWidth: 300, requireOuterEdge: true) == nil)
+
     // Continues onto the next display, or starts on a display above the shelf: untouched.
     #expect(clampedFrame(for: CGRect(x: 500, y: 0, width: 900, height: 500), reserved: [sidebar], minimumWidth: 300) == nil)
     #expect(clampedFrame(for: CGRect(x: 0, y: -700, width: 1440, height: 1500), reserved: [shelf], minimumWidth: 300) == nil)

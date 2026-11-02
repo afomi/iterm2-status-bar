@@ -41,6 +41,15 @@ cp "$(swift build -c "$CONFIG" --arch "$ARCH" --show-bin-path)/iTermSidebar" "$B
 
 cp Info.plist "$CONTENTS/Info.plist"
 
+ICONSET="$(mktemp -d)/AppIcon.iconset"
+mkdir "$ICONSET"
+for SIZE in 16 32 128 256 512; do
+    sips -z "$SIZE" "$SIZE" icon.png --out "$ICONSET/icon_${SIZE}x${SIZE}.png" >/dev/null
+    sips -z "$((SIZE * 2))" "$((SIZE * 2))" icon.png --out "$ICONSET/icon_${SIZE}x${SIZE}@2x.png" >/dev/null
+done
+iconutil -c icns "$ICONSET" -o "$RESOURCES/AppIcon.icns"
+rm -rf "$(dirname "$ICONSET")"
+
 if [ "$MODE" = "release" ]; then
     if [ -z "$TEAM_ID" ]; then
         echo "ERROR: Set TEAM_ID env var for release builds"

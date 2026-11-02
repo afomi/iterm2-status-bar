@@ -4,7 +4,7 @@ import Cocoa
 /// so zoom / "Fill" / tiling size windows to the screen's visibleFrame, underneath the sidebar
 /// or the tab shelf. Watch every app's windows via the Accessibility API and pull a window
 /// back out. A resize that overlaps is trimmed. A move is trimmed only when the window is
-/// pinned to the outer edge (a zoom); dragging across the chrome does not squash it.
+/// pinned to the list's outer edge (a zoom), so a drag does not squash it. The shelf ignores moves.
 @MainActor
 final class SidebarSpaceReserver: NSObject {
     /// Sidebar rects to keep clear, in top-left (AX) coords.
